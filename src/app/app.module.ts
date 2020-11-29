@@ -13,7 +13,6 @@ import { JobsComponent } from './components/jobs/jobs.component';
 @NgModule({
   declarations: [AppComponent, MenuComponent, UserComponent, JobsComponent],
   imports: [BrowserModule, FormsModule, routing, HttpClientModule],
-  // providers: [appRoutingProvider, DepartamentoService],
   providers: [appRoutingProvider, AuthService, UserJobService],
   bootstrap: [AppComponent],
 })
