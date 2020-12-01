@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserJobService } from '../../services/usersjobs.service';
 import { UserModel } from '../../models/user';
 
@@ -9,12 +9,21 @@ import { UserModel } from '../../models/user';
 })
 export class UserComponent implements OnInit {
   public usuarios: Array<UserModel>;
-  public usuario1: UserModel;
-  public usuario2: UserModel;
-  public usuario3: UserModel;
-  constructor(private _service: UserJobService) {}
+  public usersByName: Array<UserModel>;
+  public usersByFirstName: Array<UserModel>;
+  public usersBySecondName: Array<UserModel>;
+  @ViewChild('searchInput') term: ElementRef;
+  constructor(private _service: UserJobService) {
+    this.usuarios = new Array<UserModel>();
+    this.usersByName = new Array<UserModel>();
+    this.usersByFirstName = new Array<UserModel>();
+    this.usersBySecondName = new Array<UserModel>();
+  }
 
   ngOnInit(): void {
+    this.getAllUsers();
+  }
+  getAllUsers() {
     this._service.getUsers().subscribe(
       (resp) => {
         this.usuarios = resp;
@@ -24,32 +33,46 @@ export class UserComponent implements OnInit {
         console.log(error);
       }
     );
-    this._service.getSingleUser('', '', 'Montoya').subscribe(
-      (resp) => {
-        this.usuario1 = resp;
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this._service.getSingleUser('', 'White', '').subscribe(
-      (resp) => {
-        this.usuario2 = resp;
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this._service.getSingleUser('Tururu', '', '').subscribe(
-      (resp) => {
-        this.usuario3 = resp;
-        console.log(resp);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  }
+  performSearch() {
+    // this.usuarios = new Array<UserModel>();
+    if (this.term.nativeElement.value != '') {
+      this._service
+        .getSingleUser(this.term.nativeElement.value, '', '')
+        .subscribe(
+          (resp) => {
+            this.usersByName = resp;
+            console.log(resp);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      this._service
+        .getSingleUser('', this.term.nativeElement.value, '')
+        .subscribe(
+          (resp) => {
+            this.usersByFirstName = resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      this._service
+        .getSingleUser('', '', this.term.nativeElement.value)
+        .subscribe(
+          (resp) => {
+            this.usersBySecondName = resp;
+            this.usuarios = this.usersByName
+              .concat(this.usersByFirstName)
+              .concat(this.usersBySecondName);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    } else {
+      this.getAllUsers();
+    }
   }
 }

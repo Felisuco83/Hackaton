@@ -1,0 +1,8 @@
+.cursorPointer {
+  cursor: pointer;
+}
+
+:host >>> .popover-header {
+  color: black;
+  background-color: green;
+}

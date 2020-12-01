@@ -9,10 +9,11 @@ import { AuthService } from './services/auth.service';
 import { UserJobService } from './services/usersjobs.service';
 import { UserComponent } from './components/user/user.component';
 import { JobsComponent } from './components/jobs/jobs.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent, UserComponent, JobsComponent],
-  imports: [BrowserModule, FormsModule, routing, HttpClientModule],
+  imports: [BrowserModule, FormsModule, routing, HttpClientModule, NgbModule],
   providers: [appRoutingProvider, AuthService, UserJobService],
   bootstrap: [AppComponent],
 })
