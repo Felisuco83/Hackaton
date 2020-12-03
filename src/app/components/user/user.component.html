@@ -20,6 +20,11 @@
               </button>
             </div>
           </div>
+          <div class="col-md-2">
+            <button class="btn btn-secondary" (click)="getUserByPlate()">
+              Buscar por matrícula
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -54,15 +59,26 @@
                   >{{ user.job }}<br />
                   {{ user.job_grade }}</ng-template
                 >
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  placement="left"
-                  [ngbPopover]="popContent"
-                  popoverTitle="{{ user.job }}"
-                >
-                  {{ user.job }}
-                </button>
+                <ng-container *ngIf="currentJob">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    placement="left"
+                    #jobPopover="ngbPopover"
+                    ngbPopover="{{ popoverContent }}"
+                    popoverTitle="{{ user.job }}"
+                    triggers="manual"
+                    (click)="
+                      getAllJobsAndSetCurrentJob(
+                        user.job,
+                        user.job_grade,
+                        jobPopover
+                      )
+                    "
+                  >
+                    {{ user.job }}
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

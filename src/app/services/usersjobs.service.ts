@@ -30,19 +30,16 @@ export class UserJobService {
       localStorage.getItem('hackaton_token')
     );
     if (name != '') {
-      // header.append('name', name);
       header = new HttpHeaders()
         .set('access-token', localStorage.getItem('hackaton_token'))
         .set('name', name);
     }
     if (firstname != '') {
-      // header.append('firstname', firstname);
       header = new HttpHeaders()
         .set('access-token', localStorage.getItem('hackaton_token'))
         .set('firstname', firstname);
     }
     if (secondname != '') {
-      // header.append('secondname', secondname);
       header = new HttpHeaders()
         .set('access-token', localStorage.getItem('hackaton_token'))
         .set('secondname', secondname);
