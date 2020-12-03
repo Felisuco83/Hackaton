@@ -1,0 +1,11 @@
+
+{
+    "/api/*": {
+      "target": "http://13.93.70.220:30120/S2VAPI",
+      "secure": false,
+      "pathRewrite": {
+        "^/api": ""
+      },
+      "changeOrigin": true
+    }
+  }

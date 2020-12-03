@@ -1,3 +1,6 @@
 export var Global = {
-    urldept: "https://apicruddepartamentoscore.azurewebsites.net/"
-}
+  url: 'http://13.93.70.220:30120/S2VAPI',
+
+  urlhackaton: 'http://13.93.70.220:30120/S2VAPI',
+  // urlhackaton: 'http://13.93.70.220:30120/S2VAPI',
+};
