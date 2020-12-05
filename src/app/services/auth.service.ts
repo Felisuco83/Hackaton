@@ -16,6 +16,7 @@ export class AuthService {
       .post(Global.urlhackaton + '/authenticate', '', { headers: header })
       .subscribe((resp: any) => {
         // this.router.navigate(['profile']);
+        console.log(resp.auth + " --- " + resp.token);
         localStorage.setItem('hackaton_token', resp.token);
       });
   }

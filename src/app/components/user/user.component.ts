@@ -5,6 +5,8 @@ import * as $ from 'jquery';
 import { JobModel } from '../../models/job';
 import { JobGrade } from '../../models/jobgrade';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Vehicle } from '../../models/vehicle';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -24,7 +26,10 @@ export class UserComponent implements OnInit {
   public usuariosAux: Array<UserModel>;
   @ViewChild('searchInput') term: ElementRef;
   @ViewChild('popover') public popover: NgbPopover;
-  constructor(private _service: UserJobService) {
+  constructor(
+    private _service: UserJobService,
+    private _authservice: AuthService
+  ) {
     this.usuarios = new Array<UserModel>();
     this.usersByName = new Array<UserModel>();
     this.usersByFirstName = new Array<UserModel>();
@@ -37,6 +42,7 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._authservice.login();
     this.getAllUsers();
   }
   getAllUsers() {
@@ -82,12 +88,13 @@ export class UserComponent implements OnInit {
     var plate = this.term.nativeElement.value;
     this._service.getUsers().subscribe(
       (resp) => {
-        this.usuariosAux = resp;
-        this.userByPlate = Object.values(this.usuariosAux).filter(
-          (xx) => xx.vehicles.plate === plate
-        )[0];
         this.usuarios = new Array<UserModel>();
-        this.usuarios.push(this.userByPlate);
+        this.usuariosAux = resp;
+        for (const usuario of this.usuariosAux) {
+          for (const vehicle of Object.values(usuario.vehicles)) {
+            if (vehicle.plate == plate) this.usuarios.push(usuario);
+          }
+        }
       },
       (error) => {
         console.log(error);
