@@ -2,6 +2,27 @@
   background-color: whitesmoke;
   width: 25rem;
   padding: 10%;
-  border-radius: 5%;
-  margin-top: 5%;
+  border-radius: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.alert{
+padding-left: 1.5%;
+padding-right: 2%;
+}
+
+.btn{
+  color: black;
+  font-weight: 600;
+  transition: ease-in 0.5s;
+  background-color: #99a8b2;
+}
+
+.btn:hover{
+  color: #fff;
+  background-color: #1f6f8b ;
+  box-shadow: 0 0 20px #1c2b2d;
 }

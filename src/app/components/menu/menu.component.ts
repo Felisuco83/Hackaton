@@ -27,7 +27,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._service.login();
+    this._service.login('', '');
     this.cargarDatos();
   }
 }

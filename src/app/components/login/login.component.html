@@ -1,8 +1,8 @@
-<div *ngIf="!auth" class="alert alert-danger" role="alert">
+<div *ngIf="!auth" class="alert alert-danger text-center" role="alert">
   Los campos introducidos no son válidos
 </div>
 <div class="containerLogin justify-content-lg-center">
-  <form #formlogin="ngForm">
+  <form #formlogin="ngForm" >
     <div class="form-group">
       <label for="user">Usuario</label>
       <input
@@ -24,7 +24,7 @@
         placeholder="Contraseña"
       />
     </div>
-    <button type="submit" class="btn btn-primary" (click)="logIn()">
+    <button type="submit" class="btn btn-primary acceder" (click)="logIn()">
       Acceder
     </button>
   </form>

@@ -8,9 +8,8 @@
     align-items: center;
   }
 </style>
-<nav *ngIf="!app - login">
-  <app-menu></app-menu>
-</nav>
+
+<app-menu *ngIf="router != '/'"></app-menu>
 
 <div class="content" role="main">
   <router-outlet></router-outlet>
