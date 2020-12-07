@@ -14,9 +14,12 @@
               aria-label="Recipient's username"
               keydown.enter="performSearch()"
             />
-            <div class="input-group-append" (click)="performSearch()">
-              <button class="input-group-text">
+            <div class="input-group-append">
+              <button class="input-group-text" (click)="performSearch()">
                 <i class="fa fa-search"></i>
+              </button>
+              <button class="btn btn-secondary" (click)="getUserByPlate()">
+                Buscar por matrícula
               </button>
             </div>
           </div>
@@ -51,18 +54,31 @@
               <td>{{ user.identity.height / 100 }}</td>
               <td>
                 <ng-template #popContent
-                  >{{ user.job }}<br />
-                  {{ user.job_grade }}</ng-template
+                  ><b>Trabajo: {{ currentJob.label }}</b
+                  ><br />
+                  <b>Puesto: {{ currentJobGrade.label }} </b> <br />
+                  <b>Salario: {{ currentJobGrade.salary }}€</b></ng-template
                 >
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  placement="left"
-                  [ngbPopover]="popContent"
-                  popoverTitle="{{ user.job }}"
-                >
-                  {{ user.job }}
-                </button>
+                <ng-container *ngIf="currentJob">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    placement="left"
+                    #jobPopover="ngbPopover"
+                    [ngbPopover]="popContent"
+                    popoverTitle="{{ user.job }}"
+                    triggers="manual"
+                    (click)="
+                      getAllJobsAndSetCurrentJob(
+                        user.job,
+                        user.job_grade,
+                        jobPopover
+                      )
+                    "
+                  >
+                    {{ user.job }}
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

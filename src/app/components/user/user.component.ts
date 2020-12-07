@@ -1,6 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserJobService } from '../../services/usersjobs.service';
 import { UserModel } from '../../models/user';
+import * as $ from 'jquery';
+import { JobModel } from '../../models/job';
+import { JobGrade } from '../../models/jobgrade';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Vehicle } from '../../models/vehicle';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -12,12 +18,27 @@ export class UserComponent implements OnInit {
   public usersByName: Array<UserModel>;
   public usersByFirstName: Array<UserModel>;
   public usersBySecondName: Array<UserModel>;
+  public currentJob: JobModel;
+  public popoverContent: string;
+  public allJobs: Array<JobModel>;
+  public currentJobGrade: JobGrade;
+  public userByPlate: UserModel;
+  public usuariosAux: Array<UserModel>;
   @ViewChild('searchInput') term: ElementRef;
-  constructor(private _service: UserJobService) {
+  @ViewChild('popover') public popover: NgbPopover;
+  constructor(
+    private _service: UserJobService,
+    private _authservice: AuthService
+  ) {
     this.usuarios = new Array<UserModel>();
     this.usersByName = new Array<UserModel>();
     this.usersByFirstName = new Array<UserModel>();
     this.usersBySecondName = new Array<UserModel>();
+    this.currentJob = new JobModel('', '', [
+      new JobGrade(0, 0, '', '', '', '', ''),
+    ]);
+    this.usuarios = new Array<UserModel>();
+    this.popoverContent = '';
   }
 
   ngOnInit(): void {
@@ -34,8 +55,49 @@ export class UserComponent implements OnInit {
       }
     );
   }
+  getAllJobsAndSetCurrentJob(jobtype, jobgrade, popover: NgbPopover) {
+    this._service.getJobs().subscribe(
+      (resp) => {
+        this.allJobs = resp;
+        this.currentJob = Object.values(this.allJobs).filter(
+          (xx) => xx.name === jobtype
+        )[0];
+        this.currentJobGrade = Object.values(this.currentJob.job_grades).filter(
+          (jg) => jg.grade === jobgrade
+        )[0];
+        setTimeout(function () {
+          if (popover.isOpen()) {
+            popover.close();
+          } else {
+            popover.open();
+          }
+        }, 25);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getUserByPlate() {
+    var plate = this.term.nativeElement.value;
+    this._service.getUsers().subscribe(
+      (resp) => {
+        this.usuarios = new Array<UserModel>();
+        this.usuariosAux = resp;
+        for (const usuario of this.usuariosAux) {
+          for (const vehicle of Object.values(usuario.vehicles)) {
+            if (vehicle.plate == plate) this.usuarios.push(usuario);
+          }
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
   performSearch() {
-    // this.usuarios = new Array<UserModel>();
     if (this.term.nativeElement.value != '') {
       this._service
         .getSingleUser(this.term.nativeElement.value, '', '')
